@@ -1,1 +1,3 @@
-# py_stratify_for_d3_v5
+# PyD3Stratify
+
+To create a script for parsing csv file into json that can be used by d3.stratify() in version 5.
