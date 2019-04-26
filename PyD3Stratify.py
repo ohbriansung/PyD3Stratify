@@ -34,6 +34,7 @@ class PyD3Stratify(object):
     def _process(self, reader, headers, root, lookup):
         processed = []
         parents = set()
+        leaves = {}
         header_length = len(headers)
 
         if root:
@@ -51,14 +52,27 @@ class PyD3Stratify(object):
                 if i != header_length - 1 and current in parents:
                     continue  # append each parent for only once
 
-                processed.append({
-                    'name': current,
-                    'parent': pre,
-                    'size': 1 if i == header_length - 1 else None
-                })
+                if i == header_length - 1:
+                    if current in leaves:
+                        leaves[current]['size'] += 1
+                    else:
+                        leaf = {
+                            'name': current,
+                            'parent': pre,
+                            'size': 1
+                        }
+                        leaves[current] = leaf
+                else:
+                    processed.append({
+                        'name': current,
+                        'parent': pre,
+                        'size': None
+                    })
 
                 if i != header_length - 1:
                     parents.add(current)
+
+        processed += leaves.values()
 
         return processed
 
